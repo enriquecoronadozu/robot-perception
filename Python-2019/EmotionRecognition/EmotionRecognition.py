@@ -47,8 +47,7 @@ get_images = threading.Thread(target=thread_function, args=(1,))
 get_images.start()
 
 # parameters for loading data and images
-emotion_model_path = "emotions/" + 'models/emotion_model.hdf5'
-face_model_path = "faces/model/haarcascade_frontalface_default.xml"
+emotion_model_path = 'models/emotion_model.hdf5'
 emotion_labels = get_labels('fer2013')
 
 # hyper-parameters for bounding boxes shape

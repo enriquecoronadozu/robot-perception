@@ -15,8 +15,6 @@ try:
 except:
     pass
 
-
-path_ =  "faces/"
 node = nep.node('face_detection')
 sub_image = node.new_sub('robot_image', 'image')
 pub_position = node.new_pub('face_positions', 'json')
@@ -38,7 +36,7 @@ face_positions = threading.Thread(target=thread_function, args=(1,))
 face_positions.start()
 
 font = cv2.FONT_HERSHEY_COMPLEX_SMALL
-model_filename = path_ + 'model/haarcascade_frontalface_default.xml'
+model_filename =  'models/haarcascade_frontalface_default.xml'
 faceCascade = cv2.CascadeClassifier(model_filename)
 time.sleep(1)
 people_detected_msg_sended = False
