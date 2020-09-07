@@ -14,10 +14,10 @@ import threading
 import nep
 
 from naoqi import ALProxy
-from naoqi_sensors.vision_definitions import kYUV422ColorSpace, kYUVColorSpace, kRGBColorSpace, kBGRColorSpace, kDepthColorSpace, kRawDepthColorSpace
+#from naoqi_sensors.vision_definitions import kYUV422ColorSpace, kYUVColorSpace, kRGBColorSpace, kBGRColorSpace, kDepthColorSpace, kRawDepthColorSpace
 
 
-ip  = "192.168.11.22"
+ip  = "192.168.2.34"
 resolution = 1
 
 try:

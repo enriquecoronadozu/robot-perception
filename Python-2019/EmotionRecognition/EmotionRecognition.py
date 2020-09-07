@@ -13,7 +13,6 @@ import nep
 import threading
 import sys
 import time
-import sharo
 
 
 show_image = 1
@@ -28,11 +27,11 @@ except:
 node = nep.node('emotion_recognition')
 sub_image = node.new_sub('robot_image', 'image')
 sub_position = node.new_sub('face_positions', 'json')
-pub_emotion = node.new_pub('face_emotions', 'json')
+pub_emotion = node.new_pub('/blackboard', 'json')
 myImage = cv2.imread("x.jpg") # Temporal image
 
-classes = ["angry", "fear", "sad", "happy", "surprise", "neutral"]
-object_per = sharo.ObjectPerception(node, classes)
+#classes = ["angry", "fear", "sad", "happy", "surprise", "neutral"]
+#object_per = sharo.ObjectPerception(node, classes)
 
 def thread_function(name):  # Get images as soon as possible
     global myImage, sub_image
@@ -108,29 +107,45 @@ while True:
             except:
                 continue
 
-            pub_emotion.publish({"emotion":emotion_text, "probability":float(emotion_probability)})
 
             draw = True
+            data = {}
+            
+            
             if emotion_text == 'angry':
+                data = {"primitive":"emotion", "input":{"'angry'":"1"}, "robot":"Pepper"}
+                pub_emotion.publish(data)
+                print("angry")
                 color = 1 * np.asarray((255, 0, 0))
-                object_per.manage_objects([0])
             if emotion_text == 'fear':
-                object_per.manage_objects([1])
+                data = {"primitive":"emotion", "input":{"'fear'":"1"}, "robot":"Pepper"}
+                print("fear")
+                pub_emotion.publish(data)
                 color = 1 * np.asarray((255, 0, 0))
             elif emotion_text == 'sad':
-                object_per.manage_objects([2])
+                data = {"primitive":"emotion", "input":{"'sad'":"1"}, "robot":"Pepper"}
+                print("sad")
+                pub_emotion.publish(data)
                 color = 1 * np.asarray((0, 0, 255))
             elif emotion_text == 'happy':
-                object_per.manage_objects([3])
+                data = {"primitive":"emotion", "input":{"'happy'":"1"}, "robot":"Pepper"}
+                print("happy")
+                pub_emotion.publish(data)
                 color = 1 * np.asarray((255, 255, 0))
             elif emotion_text == 'surprise':
-                object_per.manage_objects([4])
+                data = {"primitive":"emotion", "input":{"'surprise'":"1"}, "robot":"Pepper"}
+                print("surprise")
+                pub_emotion.publish(data)
                 color = 1 * np.asarray((0, 255, 255))
             elif emotion_text == 'neutral':
-                object_per.manage_objects([5])
+                data = {"primitive":"emotion", "input":{"'neutral'":"1"}, "robot":"Pepper"}
+                print("neutral")
+                pub_emotion.publish(data)
                 color = 1 * np.asarray((0, 0, 0))
             else:
                 draw = False
+
+        
 
             if draw:
 

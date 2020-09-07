@@ -19,7 +19,7 @@ try:
 except:
     pass
 
-path_models = "objects/models/" #Path to models
+path_models = "models/" #Path to models
 
 # ------- Yolo parameters ------------
 confThreshold = 0.5  #Confidence threshold

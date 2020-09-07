@@ -19,7 +19,7 @@ node = nep.node('face_detection')
 sub_image = node.new_sub('robot_image', 'image')
 pub_position = node.new_pub('face_positions', 'json')
 
-perception_face = sharo.BooleanPerception(node, "face_detection", "value", 1, 3)  # --------------- Sharo ------------------
+perception_face = sharo.BooleanPerception(node, "human_detected", "value", 1, 3)  # --------------- Sharo ------------------
 frame = ""
 bounding_boxes = ""
 
@@ -56,6 +56,8 @@ def draw_bounding_box(face_coordinates, image_array, color):
 
 main_face = [0,0]
 nb_faces = 0
+timer_faces_yes = 0
+timer_faces_no = 0
         
 while True:
         newImage = frame.copy()
@@ -105,14 +107,29 @@ while True:
             box = {"x1" : int(matrix[close,0]), "x2" : int(matrix[close,1]),"y1" : int(matrix[close,0] + matrix[i,2]), "y2" : int(matrix[close,1] + matrix[i,3])}
             pub_position.publish({"face": {"center":center, "size":size,"box":box}})
             nb_faces = bounding_boxes.shape[0]
+            
             if(nb_faces > 0):
-                perception_face.primitive_detected()      # --------------- Sharo ------------------
+                timer_faces_yes = timer_faces_yes + 1
+                if (timer_faces_yes > 10):
+                    timer_faces_yes = 0
+                    perception_face.primitive_detected()      # --------------- Sharo ------------------
+                    timer_faces_no = 0
+                    
             else:
                 pub_position.publish({"positions": []})
-                perception_face.primitive_non_detected()   # --------------- Sharo ------------------
+                if (timer_faces_no > 10):
+                    timer_faces_no = timer_faces_no + 1
+                    perception_face.primitive_non_detected()  # --------------- Sharo ------------------
+                    timer_faces_yes = 0
+                    timer_faces_no = 0
             
         else:
-            perception_face.primitive_non_detected()       # --------------- Sharo ------------------
+            
+            timer_faces_no = timer_faces_no + 1
+            timer_faces_yes = 0
+            if (timer_faces_no > 10):
+                timer_faces_no = 0
+                perception_face.primitive_non_detected()  # --------------- Sharo ------------------
             nb_faces = 0
 
         
